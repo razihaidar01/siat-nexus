@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, Phone } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import siatLogo from "@/assets/siat-logo.png";
 
@@ -50,8 +50,7 @@ const navItems = [
       { label: "Capability Statement", href: "/government-projects/capability-statement" },
     ],
   },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact-us" },
+  { label: "Verify Certificate", href: "/verify-certificate" },
 ];
 
 const SiteHeader = () => {
@@ -126,10 +125,6 @@ const SiteHeader = () => {
 
         {/* CTA + Mobile toggle */}
         <div className="flex items-center gap-3">
-          <a href="tel:+917004216219" className="hidden md:flex items-center gap-2 text-sm font-medium text-primary">
-            <Phone className="w-4 h-4" />
-            <span>Call Us</span>
-          </a>
           <Link to="/contact-us" className="hidden md:block btn-primary-glow !py-2.5 !px-5 !text-sm">
             Apply Now
           </Link>
