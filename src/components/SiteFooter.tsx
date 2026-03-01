@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
+import siatLogo from "@/assets/siat-logo.png";
 
 const footerLinks = [
   {
@@ -53,6 +54,15 @@ const SiteFooter = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+        {/* Logo + tagline */}
+        <div className="flex items-center gap-3 mb-12">
+          <img src={siatLogo} alt="SIAT Group Logo" className="w-14 h-14 rounded-full" />
+          <div>
+            <span className="font-display font-bold text-2xl text-background">SIAT Group</span>
+            <p className="text-sm text-background/50">Bihar's Leading Training, IT & Consultancy Organization</p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
           {footerLinks.map((section) => (
             <div key={section.title}>

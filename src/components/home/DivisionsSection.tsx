@@ -7,7 +7,8 @@ const divisions = [
   {
     icon: GraduationCap,
     title: "Training Institute",
-    description: "Industry-ready skill development programs in mobile, laptop & AC repairing, CCTV installation with placement support and QR-verified certificates.",
+    description: "Industry-ready skill development programs — mobile, laptop & AC repairing, CCTV installation with placement support aur QR-verified certificates.",
+    hinglish: "Practical training se career banayein — job-ready skills seekhein!",
     color: "from-primary to-accent",
     href: "/training-institute",
     features: ["Practical Labs", "Certified Instructors", "Job Placement"],
@@ -15,7 +16,8 @@ const divisions = [
   {
     icon: Code2,
     title: "RH Software",
-    description: "Full-stack IT solutions — website, app, software, and AI development. Helping businesses in Bihar and beyond go digital.",
+    description: "Full-stack IT solutions — website, app, software, aur AI development. Bihar ke businesses ko digital banayein.",
+    hinglish: "Apna business online le jaayein — website se app tak sab banwayein!",
     color: "from-accent to-sky",
     href: "/rh-software",
     features: ["Web & Mobile Apps", "AI Solutions", "Enterprise Software"],
@@ -23,7 +25,8 @@ const divisions = [
   {
     icon: Briefcase,
     title: "Consultancy Services",
-    description: "Expert guidance for college admissions (MBBS, B.Tech, BCA, Nursing), ISO certification, MSME registration, and career counseling.",
+    description: "College admissions (MBBS, B.Tech, BCA, Nursing), ISO certification, MSME registration, aur career counseling mein expert guidance.",
+    hinglish: "Admission se certification tak — sab kuch ek jagah!",
     color: "from-gold to-primary",
     href: "/consultancy-services",
     features: ["MBBS Admission", "ISO Certification", "Career Counseling"],
@@ -31,7 +34,8 @@ const divisions = [
   {
     icon: Landmark,
     title: "Government Projects",
-    description: "Trusted partner for PMKVY, Skill India, MSME tenders, and CSR education projects with proven infrastructure and compliance.",
+    description: "PMKVY, Skill India, MSME tenders, aur CSR education projects ke liye trusted partner — proven infrastructure aur compliance.",
+    hinglish: "Sarkar ka bharosemand partner — skill training aur project delivery mein!",
     color: "from-primary to-navy",
     href: "/government-projects",
     features: ["PMKVY Center", "Skill India Partner", "Tender Compliance"],
@@ -57,7 +61,7 @@ const DivisionsSection = () => {
             Our Four <span className="gradient-text">Divisions</span>
           </h2>
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-            A comprehensive ecosystem designed to empower Bihar through education, technology, and institutional growth.
+            Ek complete ecosystem — Bihar ko education, technology, aur institutional growth se empower karna.
           </p>
         </motion.div>
 
@@ -73,9 +77,10 @@ const DivisionsSection = () => {
                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${div.color} flex items-center justify-center mb-6`}>
                   <div.icon className="w-7 h-7 text-primary-foreground" />
                 </div>
-                <h3 className="text-2xl font-display font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                <h3 className="text-2xl font-display font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                   {div.title}
                 </h3>
+                <p className="text-sm text-primary/80 italic mb-3">{div.hinglish}</p>
                 <p className="text-muted-foreground leading-relaxed mb-6">{div.description}</p>
                 <div className="flex flex-wrap gap-2">
                   {div.features.map((f) => (

@@ -3,10 +3,10 @@ import { motion, useInView } from "framer-motion";
 import { Award, Users, ShieldCheck, Building2 } from "lucide-react";
 
 const reasons = [
-  { icon: Award, title: "Practical Training", description: "Hands-on learning in fully equipped labs with real-world projects and live equipment." },
-  { icon: Users, title: "Placement Support", description: "Dedicated placement cell connecting graduates with employers across Bihar and India." },
-  { icon: ShieldCheck, title: "ISO Certified", description: "Internationally recognized certification ensuring highest quality standards." },
-  { icon: Building2, title: "Government Experience", description: "Proven track record with PMKVY, Skill India, and MSME government projects." },
+  { icon: Award, title: "Practical Training", description: "Real-world projects aur live equipment par hands-on learning — fully equipped labs mein." },
+  { icon: Users, title: "Placement Support", description: "Dedicated placement cell — graduates ko Bihar aur poore India mein employers se connect karta hai." },
+  { icon: ShieldCheck, title: "ISO Certified", description: "Internationally recognized certification — highest quality standards ka guarantee." },
+  { icon: Building2, title: "Government Experience", description: "PMKVY, Skill India, aur MSME government projects mein proven track record." },
 ];
 
 const WhyChooseSection = () => {
@@ -25,11 +25,14 @@ const WhyChooseSection = () => {
           >
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Why SIAT Group</span>
             <h2 className="text-3xl md:text-5xl font-display font-black text-foreground mt-3 mb-6">
-              Why Choose <span className="gradient-text">SIAT?</span>
+              SIAT Ko <span className="gradient-text">Kyun Chunein?</span>
             </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-              With over a decade of experience in skill development, technology, and institutional consulting,
-              SIAT Group has become Bihar's most trusted name for career transformation and business growth.
+            <p className="text-muted-foreground text-lg leading-relaxed mb-4">
+              Ek decade se zyada ka experience — skill development, technology, aur institutional consulting mein.
+              SIAT Group Bihar ka sabse bharosemand naam hai career transformation aur business growth ke liye.
+            </p>
+            <p className="text-muted-foreground/80 italic mb-8">
+              "Humne hazaron students ki zindagi badli hai — ab aapki baari hai!"
             </p>
             <div className="grid grid-cols-2 gap-3">
               {["10,000+ Alumni", "50+ Govt. Partners", "ISO 9001:2015", "4 Divisions"].map((item) => (

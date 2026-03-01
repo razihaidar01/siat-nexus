@@ -27,6 +27,7 @@ const ContactSection = () => {
           <h2 className="text-3xl md:text-5xl font-display font-black text-foreground mt-3">
             Contact <span className="gradient-text">SIAT Group</span>
           </h2>
+          <p className="text-muted-foreground mt-4">Koi bhi sawaal ho — humse baat karein, hum madad ke liye taiyaar hain!</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12">
@@ -41,7 +42,7 @@ const ContactSection = () => {
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
                 <label className="text-sm font-medium text-foreground mb-1.5 block">Name</label>
-                <input type="text" required className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground" placeholder="Your name" />
+                <input type="text" required className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground" placeholder="Apna naam likhein" />
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground mb-1.5 block">Phone</label>
@@ -64,10 +65,10 @@ const ContactSection = () => {
             </div>
             <div>
               <label className="text-sm font-medium text-foreground mb-1.5 block">Message</label>
-              <textarea rows={4} className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground resize-none" placeholder="Tell us about your needs..." />
+              <textarea rows={4} className="w-full px-4 py-3 rounded-xl bg-background border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground resize-none" placeholder="Apni zaroorat batayein..." />
             </div>
             <button type="submit" className="btn-primary-glow w-full flex items-center justify-center gap-2">
-              {submitted ? "Sent! ✓" : <><Send className="w-4 h-4" /> Send Message</>}
+              {submitted ? "Bhej Diya! ✓" : <><Send className="w-4 h-4" /> Send Message</>}
             </button>
           </motion.form>
 

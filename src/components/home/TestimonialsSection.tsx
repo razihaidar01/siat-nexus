@@ -3,11 +3,11 @@ import { motion, useInView } from "framer-motion";
 import { Star } from "lucide-react";
 
 const testimonials = [
-  { name: "Rahul Kumar", course: "Mobile Repairing", text: "SIAT's practical training helped me start my own mobile repair shop within 2 months of completing the course. The placement team was very supportive.", rating: 5 },
-  { name: "Priya Singh", course: "Website Development", text: "RH Software's mentorship helped me build real projects. I got placed in a Patna-based IT company right after the program.", rating: 5 },
-  { name: "Amit Jha", course: "AC Repairing", text: "Best AC repairing institute in Bihar. Hands-on training with real units. Now I earn ₹25,000+ monthly as a certified technician.", rating: 5 },
-  { name: "Sneha Kumari", course: "MBBS Admission", text: "SIAT's consultancy team guided me through the entire NEET counseling and admission process. Very professional and trustworthy.", rating: 5 },
-  { name: "Vikash Yadav", course: "CCTV Installation", text: "Completed CCTV training in 3 months. Now handling installation projects independently. Great course and great team!", rating: 5 },
+  { name: "Rahul Kumar", course: "Mobile Repairing", text: "SIAT ki practical training ne mujhe 2 mahine mein apni mobile repair shop kholne mein madad ki. Placement team bahut supportive thi.", rating: 5 },
+  { name: "Priya Singh", course: "Website Development", text: "RH Software ki mentorship se maine real projects banaye. Patna ki ek IT company mein turant placement mil gayi.", rating: 5 },
+  { name: "Amit Jha", course: "AC Repairing", text: "Bihar ka best AC repairing institute. Real units par hands-on training. Ab main ₹25,000+ monthly kamata hoon as certified technician.", rating: 5 },
+  { name: "Sneha Kumari", course: "MBBS Admission", text: "SIAT ki consultancy team ne NEET counseling aur admission process mein poori guidance di. Bahut professional aur trustworthy.", rating: 5 },
+  { name: "Vikash Yadav", course: "CCTV Installation", text: "3 mahine mein CCTV training complete ki. Ab independently installation projects handle karta hoon. Great course aur great team!", rating: 5 },
 ];
 
 const TestimonialsSection = () => {
@@ -26,8 +26,9 @@ const TestimonialsSection = () => {
         >
           <span className="text-sm font-semibold text-primary uppercase tracking-wider">Success Stories</span>
           <h2 className="text-3xl md:text-5xl font-display font-black text-foreground mt-3">
-            What Our <span className="gradient-text">Students Say</span>
+            Hamare <span className="gradient-text">Students Kya Kehte Hain</span>
           </h2>
+          <p className="text-muted-foreground mt-4">Real students, real results — unki kahaani unki zubaani!</p>
         </motion.div>
 
         <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-6 px-6">

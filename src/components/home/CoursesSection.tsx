@@ -9,28 +9,32 @@ const courses = [
     title: "Mobile Repairing Course",
     duration: "3–6 Months",
     href: "/training-institute/mobile-repairing-course-bihar",
-    description: "Learn chip-level mobile repair with hands-on training on latest smartphones.",
+    description: "Chip-level mobile repair seekhein — latest smartphones par hands-on training.",
+    hinglish: "Mobile repair ka complete course — apna shop kholein!",
   },
   {
     icon: Wind,
     title: "AC Repairing Course",
     duration: "3–6 Months",
     href: "/training-institute/ac-repairing-course-bihar",
-    description: "Master split & window AC installation, servicing, and gas charging.",
+    description: "Split & Window AC installation, servicing, aur gas charging master karein.",
+    hinglish: "AC technician banein — demand bahut hai!",
   },
   {
     icon: Laptop,
     title: "Laptop Repairing Course",
     duration: "4–6 Months",
     href: "/training-institute/laptop-repairing-course-bihar",
-    description: "Hardware & software repair including motherboard, BGA rework, and OS troubleshooting.",
+    description: "Hardware & software repair — motherboard, BGA rework, OS troubleshooting.",
+    hinglish: "Laptop repair seekhein — high-demand skill!",
   },
   {
     icon: Camera,
     title: "CCTV Installation Training",
     duration: "2–3 Months",
     href: "/training-institute/cctv-installation-training-bihar",
-    description: "Complete CCTV setup, networking, DVR/NVR configuration and maintenance.",
+    description: "Complete CCTV setup, networking, DVR/NVR configuration aur maintenance.",
+    hinglish: "CCTV expert banein — har jagah demand hai!",
   },
 ];
 
@@ -53,7 +57,7 @@ const CoursesSection = () => {
             Skill Development <span className="gradient-text">Courses</span>
           </h2>
           <p className="text-muted-foreground mt-4 max-w-xl mx-auto">
-            Industry-focused training with placement support and QR-verified certificates.
+            Industry-focused training with placement support aur QR-verified certificates.
           </p>
         </motion.div>
 
@@ -74,6 +78,7 @@ const CoursesSection = () => {
                 </h3>
                 <span className="text-xs font-medium text-accent">{course.duration}</span>
                 <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{course.description}</p>
+                <p className="text-xs text-primary/70 italic mt-2">{course.hinglish}</p>
               </Link>
             </motion.div>
           ))}
