@@ -1,28 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, CheckCircle, XCircle, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const VerifyCertificatePage = () => {
+  const [searchParams] = useSearchParams();
   const [certNumber, setCertNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [searched, setSearched] = useState(false);
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!certNumber.trim()) return;
+  // Auto-verify if QR code provides ?id= parameter
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      setCertNumber(id);
+      verifyNumber(id);
+    }
+  }, [searchParams]);
+
+  const verifyNumber = async (number: string) => {
+    if (!number.trim()) return;
     setLoading(true);
     setSearched(true);
-
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("certificates")
       .select("*")
-      .eq("certificate_number", certNumber.trim())
+      .eq("certificate_number", number.trim())
       .maybeSingle();
-
     setResult(data);
     setLoading(false);
+  };
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    verifyNumber(certNumber);
   };
 
   return (

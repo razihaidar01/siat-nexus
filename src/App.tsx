@@ -30,6 +30,8 @@ import PlacementSupportPage from "./pages/PlacementSupportPage";
 import BestCollegePage from "./pages/BestCollegePage";
 import MSMERegistrationPage from "./pages/MSMERegistrationPage";
 import GenericPage from "./pages/GenericPage";
+import AdminLoginPage from "./pages/AdminLoginPage";
+import AdminAreaPage from "./pages/AdminAreaPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -106,6 +108,9 @@ const App = () => (
             <Route path="/terms-conditions" element={<GenericPage title="Terms & Conditions" description="SIAT ki terms aur conditions." />} />
             <Route path="/disclaimer" element={<GenericPage title="Disclaimer" description="SIAT ka disclaimer." />} />
           </Route>
+          {/* Admin routes - outside SiteLayout */}
+          <Route path="/admin-login" element={<AdminLoginPage />} />
+          <Route path="/adminarea" element={<AdminAreaPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
