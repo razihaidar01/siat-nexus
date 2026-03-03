@@ -30,6 +30,8 @@ import PlacementSupportPage from "./pages/PlacementSupportPage";
 import BestCollegePage from "./pages/BestCollegePage";
 import MSMERegistrationPage from "./pages/MSMERegistrationPage";
 import GenericPage from "./pages/GenericPage";
+import BlogPage from "./pages/BlogPage";
+import GalleryPage from "./pages/GalleryPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminAreaPage from "./pages/AdminAreaPage";
 import NotFound from "./pages/NotFound";
@@ -96,7 +98,8 @@ const App = () => (
             
             {/* Other pages */}
             <Route path="/verify-certificate" element={<VerifyCertificatePage />} />
-            <Route path="/gallery" element={<GenericPage title="Gallery" description="SIAT ki photos — labs, events, training sessions aur infrastructure." />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/chairman-message" element={<GenericPage title="Chairman's Message" description="SIAT ke Chairman ka sandesh — vision aur mission." />} />
             <Route path="/our-team" element={<GenericPage title="Our Team" description="SIAT ki experienced team se milein." />} />
             <Route path="/infrastructure" element={<GenericPage title="Infrastructure" description="SIAT ki modern infrastructure dekhein — labs, classrooms aur facilities." />} />

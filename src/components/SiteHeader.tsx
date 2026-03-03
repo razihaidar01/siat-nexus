@@ -6,6 +6,7 @@ import siatLogo from "@/assets/siat-logo.png";
 
 const navItems = [
   { label: "About", href: "/about-us" },
+  { label: "Blog", href: "/blog" },
   {
     label: "Training",
     href: "/training-institute",
