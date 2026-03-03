@@ -1,11 +1,33 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Bot } from "lucide-react";
+import { X, Send, Bot } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+
+const extractLeadFromText = (text: string) => {
+  const phoneMatch = text.match(/(?:\+?91[\s-]?)?[6-9]\d{9}/);
+  if (!phoneMatch) return null;
+
+  const digits = phoneMatch[0].replace(/\D/g, "");
+  const phone = digits.slice(-10);
+  if (phone.length !== 10) return null;
+
+  const emailMatch = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+  const nameMatch = text.match(/(?:my\s*name\s*is|name\s*is|name)\s*[:\-]?\s*([A-Za-z][A-Za-z\s]{1,60})/i);
+  const extractedName = nameMatch?.[1]?.trim();
+
+  return {
+    name: extractedName && extractedName.length <= 100 ? extractedName : "AI Assistant Lead",
+    phone,
+    email: emailMatch?.[0] || null,
+    message: text.slice(0, 1000),
+    interest: "AI Assistant",
+  };
+};
 
 const AIChatWidget = () => {
   const [open, setOpen] = useState(false);
@@ -32,8 +54,13 @@ const AIChatWidget = () => {
     setIsLoading(true);
 
     let assistantSoFar = "";
+    const lead = extractLeadFromText(text);
 
     try {
+      if (lead) {
+        await supabase.from("contact_submissions").insert(lead);
+      }
+
       const resp = await fetch(CHAT_URL, {
         method: "POST",
         headers: {

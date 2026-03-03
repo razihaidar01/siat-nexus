@@ -32,6 +32,7 @@ import MSMERegistrationPage from "./pages/MSMERegistrationPage";
 import GenericPage from "./pages/GenericPage";
 import BlogPage from "./pages/BlogPage";
 import GalleryPage from "./pages/GalleryPage";
+import DocumentsPage from "./pages/DocumentsPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminAreaPage from "./pages/AdminAreaPage";
 import NotFound from "./pages/NotFound";
@@ -100,6 +101,7 @@ const App = () => (
             <Route path="/verify-certificate" element={<VerifyCertificatePage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/documents" element={<DocumentsPage />} />
             <Route path="/chairman-message" element={<GenericPage title="Chairman's Message" description="SIAT ke Chairman ka sandesh — vision aur mission." />} />
             <Route path="/our-team" element={<GenericPage title="Our Team" description="SIAT ki experienced team se milein." />} />
             <Route path="/infrastructure" element={<GenericPage title="Infrastructure" description="SIAT ki modern infrastructure dekhein — labs, classrooms aur facilities." />} />

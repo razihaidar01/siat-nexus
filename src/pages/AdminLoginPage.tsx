@@ -48,7 +48,8 @@ const AdminLoginPage = () => {
     const { error: signInError } = await signIn(email, password);
 
     if (signInError) {
-      setError("Invalid credentials. Access denied.");
+      const isNetworkError = signInError.message?.toLowerCase().includes("fetch") || signInError.message?.toLowerCase().includes("network");
+      setError(isNetworkError ? "Network issue while logging in. Please try again in a few seconds." : "Invalid credentials. Access denied.");
       setLoading(false);
       return;
     }

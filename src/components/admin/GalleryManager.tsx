@@ -23,6 +23,7 @@ const GalleryManager = () => {
   const [preview, setPreview] = useState<string | null>(null);
 
   const fetchImages = async () => {
+    setLoading(true);
     const { data } = await supabase
       .from("images")
       .select("*")
@@ -33,6 +34,19 @@ const GalleryManager = () => {
 
   useEffect(() => {
     fetchImages();
+
+    const channel = supabase
+      .channel("admin-images-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "images" },
+        () => fetchImages()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

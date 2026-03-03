@@ -38,6 +38,7 @@ const CertificateManager = () => {
   const [certNumber, setCertNumber] = useState(generateCertNumber());
 
   const fetchCertificates = async () => {
+    setLoading(true);
     const { data } = await supabase
       .from("certificates")
       .select("*")
@@ -48,6 +49,19 @@ const CertificateManager = () => {
 
   useEffect(() => {
     fetchCertificates();
+
+    const channel = supabase
+      .channel("admin-certificates-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "certificates" },
+        () => fetchCertificates()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
