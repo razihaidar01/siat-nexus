@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 
 const certifications = [
   { name: "ISO 9001:2015", desc: "Quality Management System", icon: Shield },
-  { name: "ISO 14001:2015", desc: "Environmental Management", icon: Award },
-  { name: "ISO 45001:2018", desc: "Occupational Health & Safety", icon: CheckCircle },
 ];
 
 const ISOSection = () => {

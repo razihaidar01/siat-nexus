@@ -15,6 +15,10 @@ interface Certificate {
   is_valid: boolean | null;
   qr_code_url: string | null;
   created_at: string;
+  father_name: string | null;
+  mother_name: string | null;
+  training_from: string | null;
+  training_to: string | null;
 }
 
 const SITE_URL = window.location.origin;
@@ -32,9 +36,13 @@ const CertificateManager = () => {
   const [showForm, setShowForm] = useState(false);
 
   const [studentName, setStudentName] = useState("");
+  const [fatherName, setFatherName] = useState("");
+  const [motherName, setMotherName] = useState("");
   const [courseName, setCourseName] = useState("");
   const [issueDate, setIssueDate] = useState(new Date().toISOString().split("T")[0]);
   const [expiryDate, setExpiryDate] = useState("");
+  const [trainingFrom, setTrainingFrom] = useState("");
+  const [trainingTo, setTrainingTo] = useState("");
   const [certNumber, setCertNumber] = useState(generateCertNumber());
 
   const fetchCertificates = async () => {
@@ -101,7 +109,11 @@ const CertificateManager = () => {
         expiry_date: expiryDate || null,
         qr_code_url: qrUrl.publicUrl,
         is_valid: true,
-      });
+        father_name: fatherName.trim() || null,
+        mother_name: motherName.trim() || null,
+        training_from: trainingFrom || null,
+        training_to: trainingTo || null,
+      } as any);
 
       if (error) {
         if (error.code === "23505") {
@@ -124,9 +136,13 @@ const CertificateManager = () => {
 
   const resetForm = () => {
     setStudentName("");
+    setFatherName("");
+    setMotherName("");
     setCourseName("");
     setIssueDate(new Date().toISOString().split("T")[0]);
     setExpiryDate("");
+    setTrainingFrom("");
+    setTrainingTo("");
     setCertNumber(generateCertNumber());
     setShowForm(false);
   };
@@ -162,28 +178,55 @@ const CertificateManager = () => {
     // Body
     doc.setFontSize(12);
     doc.setTextColor(200, 200, 200);
-    doc.text("This is to certify that", 148.5, 80, { align: "center" });
+    doc.text("This is to certify that", 148.5, 75, { align: "center" });
 
     doc.setFontSize(22);
     doc.setTextColor(255, 255, 255);
-    doc.text(cert.student_name, 148.5, 95, { align: "center" });
+    doc.text(cert.student_name, 148.5, 88, { align: "center" });
+
+    let yPos = 96;
+    doc.setFontSize(10);
+    doc.setTextColor(180, 180, 180);
+    if (cert.father_name) {
+      doc.text(`S/D of: ${cert.father_name}`, 148.5, yPos, { align: "center" });
+      yPos += 7;
+    }
+    if (cert.mother_name) {
+      doc.text(`Mother: ${cert.mother_name}`, 148.5, yPos, { align: "center" });
+      yPos += 7;
+    }
 
     doc.setFontSize(12);
     doc.setTextColor(200, 200, 200);
-    doc.text("has successfully completed the course", 148.5, 110, { align: "center" });
+    doc.text("has successfully completed the course", 148.5, yPos + 4, { align: "center" });
 
     doc.setFontSize(18);
     doc.setTextColor(0, 200, 150);
-    doc.text(cert.course_name, 148.5, 125, { align: "center" });
+    doc.text(cert.course_name, 148.5, yPos + 18, { align: "center" });
 
     // Details
     doc.setFontSize(10);
     doc.setTextColor(180, 180, 180);
-    doc.text(`Certificate No: ${cert.certificate_number}`, 40, 150);
-    doc.text(`Issue Date: ${cert.issue_date}`, 40, 158);
-    if (cert.expiry_date) {
-      doc.text(`Valid Until: ${cert.expiry_date}`, 40, 166);
+    let detailY = 150;
+    doc.text(`Certificate No: ${cert.certificate_number}`, 40, detailY);
+    detailY += 7;
+    doc.text(`Issue Date: ${cert.issue_date}`, 40, detailY);
+    detailY += 7;
+    if (cert.training_from && cert.training_to) {
+      doc.text(`Training Period: ${cert.training_from} to ${cert.training_to}`, 40, detailY);
+      detailY += 7;
     }
+    if (cert.expiry_date) {
+      doc.text(`Valid Until: ${cert.expiry_date}`, 40, detailY);
+    }
+
+    // Director signature
+    doc.setFontSize(11);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Md Parwez Alam", 148.5, 175, { align: "center" });
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Director, SIAT", 148.5, 180, { align: "center" });
 
     // QR Code
     if (cert.qr_code_url) {
@@ -192,10 +235,10 @@ const CertificateManager = () => {
           `${SITE_URL}/verify-certificate?id=${encodeURIComponent(cert.certificate_number)}`,
           { width: 200, margin: 1, color: { dark: "#1a1a2e", light: "#ffffff" } }
         );
-        doc.addImage(qrDataUrl, "PNG", 220, 135, 35, 35);
+        doc.addImage(qrDataUrl, "PNG", 230, 140, 30, 30);
         doc.setFontSize(7);
         doc.setTextColor(150, 150, 150);
-        doc.text("Scan to verify", 237.5, 175, { align: "center" });
+        doc.text("Scan to verify", 245, 174, { align: "center" });
       } catch {
         // QR generation failed, skip
       }
@@ -293,6 +336,28 @@ const CertificateManager = () => {
                 />
               </div>
               <div>
+                <label className="text-sm font-medium text-foreground block mb-1">Father's Name</label>
+                <input
+                  type="text"
+                  value={fatherName}
+                  onChange={(e) => setFatherName(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary outline-none text-foreground"
+                  placeholder="Father's name"
+                  maxLength={100}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground block mb-1">Mother's Name</label>
+                <input
+                  type="text"
+                  value={motherName}
+                  onChange={(e) => setMotherName(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary outline-none text-foreground"
+                  placeholder="Mother's name"
+                  maxLength={100}
+                />
+              </div>
+              <div>
                 <label className="text-sm font-medium text-foreground block mb-1">Course Name *</label>
                 <input
                   type="text"
@@ -302,6 +367,24 @@ const CertificateManager = () => {
                   placeholder="e.g. Mobile Repairing Course"
                   maxLength={150}
                   required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground block mb-1">Training From</label>
+                <input
+                  type="date"
+                  value={trainingFrom}
+                  onChange={(e) => setTrainingFrom(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary outline-none text-foreground"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground block mb-1">Training To</label>
+                <input
+                  type="date"
+                  value={trainingTo}
+                  onChange={(e) => setTrainingTo(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary outline-none text-foreground"
                 />
               </div>
               <div>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Bot } from "lucide-react";
+import { X, Send, MessageSquareText } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -139,7 +139,7 @@ const AIChatWidget = () => {
             style={{ boxShadow: "0 4px 20px hsl(215 80% 48% / 0.4)" }}
             aria-label="Open AI Chat"
           >
-            <Bot className="w-6 h-6" />
+            <MessageSquareText className="w-6 h-6" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -157,7 +157,7 @@ const AIChatWidget = () => {
             {/* Header */}
             <div className="bg-primary text-primary-foreground px-4 py-3 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-2">
-                <Bot className="w-5 h-5" />
+                <MessageSquareText className="w-5 h-5" />
                 <div>
                   <p className="font-semibold text-sm">SIAT AI Assistant</p>
                   <p className="text-[10px] opacity-80">Online • Aapki madad ke liye</p>

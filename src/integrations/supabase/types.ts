@@ -20,33 +20,45 @@ export type Database = {
           course_name: string
           created_at: string
           expiry_date: string | null
+          father_name: string | null
           id: string
           is_valid: boolean | null
           issue_date: string
+          mother_name: string | null
           qr_code_url: string | null
           student_name: string
+          training_from: string | null
+          training_to: string | null
         }
         Insert: {
           certificate_number: string
           course_name: string
           created_at?: string
           expiry_date?: string | null
+          father_name?: string | null
           id?: string
           is_valid?: boolean | null
           issue_date: string
+          mother_name?: string | null
           qr_code_url?: string | null
           student_name: string
+          training_from?: string | null
+          training_to?: string | null
         }
         Update: {
           certificate_number?: string
           course_name?: string
           created_at?: string
           expiry_date?: string | null
+          father_name?: string | null
           id?: string
           is_valid?: boolean | null
           issue_date?: string
+          mother_name?: string | null
           qr_code_url?: string | null
           student_name?: string
+          training_from?: string | null
+          training_to?: string | null
         }
         Relationships: []
       }
