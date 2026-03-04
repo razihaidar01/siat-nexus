@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
-import { LogOut, Image, Award, LayoutDashboard } from "lucide-react";
+import { LogOut, Image, Award, LayoutDashboard, FileText, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import GalleryManager from "@/components/admin/GalleryManager";
 import CertificateManager from "@/components/admin/CertificateManager";
+import DocumentsManager from "@/components/admin/DocumentsManager";
+import ContactSubmissions from "@/components/admin/ContactSubmissions";
 
-type Tab = "gallery" | "certificates";
+type Tab = "gallery" | "certificates" | "documents" | "contacts";
 
 const AdminAreaPage = () => {
   const { user, isAdmin, loading, signOut } = useAdmin();
@@ -37,6 +39,8 @@ const AdminAreaPage = () => {
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "certificates", label: "Certificates", icon: <Award className="w-4 h-4" /> },
     { id: "gallery", label: "Gallery", icon: <Image className="w-4 h-4" /> },
+    { id: "documents", label: "Documents", icon: <FileText className="w-4 h-4" /> },
+    { id: "contacts", label: "Contact Leads", icon: <MessageSquare className="w-4 h-4" /> },
   ];
 
   return (
@@ -81,6 +85,8 @@ const AdminAreaPage = () => {
         {/* Tab Content */}
         {activeTab === "gallery" && <GalleryManager />}
         {activeTab === "certificates" && <CertificateManager />}
+        {activeTab === "documents" && <DocumentsManager />}
+        {activeTab === "contacts" && <ContactSubmissions />}
       </div>
     </section>
   );
