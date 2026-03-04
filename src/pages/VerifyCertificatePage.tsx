@@ -11,7 +11,6 @@ const VerifyCertificatePage = () => {
   const [result, setResult] = useState<any>(null);
   const [searched, setSearched] = useState(false);
 
-  // Auto-verify if QR code provides ?id= parameter
   useEffect(() => {
     const id = searchParams.get("id");
     if (id) {
@@ -36,6 +35,16 @@ const VerifyCertificatePage = () => {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     verifyNumber(certNumber);
+  };
+
+  const DetailRow = ({ label, value }: { label: string; value: string | null | undefined }) => {
+    if (!value) return null;
+    return (
+      <div className="flex justify-between py-2 border-b border-border">
+        <span className="text-muted-foreground">{label}</span>
+        <span className="font-medium text-foreground">{value}</span>
+      </div>
+    );
   };
 
   return (
@@ -80,31 +89,35 @@ const VerifyCertificatePage = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
               {result ? (
                 <div className="glass-card p-8 border-2 border-green-500/30">
-                  <div className="flex items-center gap-3 mb-6">
-                    <CheckCircle className="w-8 h-8 text-green-500" />
-                    <h3 className="text-xl font-display font-bold text-green-700">Certificate Verified ✓</h3>
+                  {/* SIAT Badge */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-8 h-8 text-green-500" />
+                      <h3 className="text-xl font-display font-bold text-green-700">Certificate Verified ✓</h3>
+                    </div>
+                    {result.is_valid && (
+                      <div className="flex flex-col items-center">
+                        <div className="w-16 h-16 rounded-full border-2 border-primary bg-primary/10 flex items-center justify-center">
+                          <ShieldCheck className="w-8 h-8 text-primary" />
+                        </div>
+                        <span className="text-[10px] font-bold text-primary mt-1">SIAT VERIFIED</span>
+                      </div>
+                    )}
                   </div>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <span className="text-muted-foreground">Certificate No.</span>
-                      <span className="font-medium text-foreground">{result.certificate_number}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <span className="text-muted-foreground">Student Name</span>
-                      <span className="font-medium text-foreground">{result.student_name}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <span className="text-muted-foreground">Course</span>
-                      <span className="font-medium text-foreground">{result.course_name}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-border">
-                      <span className="text-muted-foreground">Issue Date</span>
-                      <span className="font-medium text-foreground">{result.issue_date}</span>
-                    </div>
+                  <div className="space-y-1 text-sm">
+                    <DetailRow label="Certificate No." value={result.certificate_number} />
+                    <DetailRow label="Student Name" value={result.student_name} />
+                    <DetailRow label="Father's Name" value={result.father_name} />
+                    <DetailRow label="Mother's Name" value={result.mother_name} />
+                    <DetailRow label="Course" value={result.course_name} />
+                    <DetailRow label="Issue Date" value={result.issue_date} />
+                    <DetailRow label="Training From" value={result.training_from} />
+                    <DetailRow label="Training To" value={result.training_to} />
+                    {result.expiry_date && <DetailRow label="Valid Until" value={result.expiry_date} />}
                     <div className="flex justify-between py-2">
                       <span className="text-muted-foreground">Status</span>
                       <span className={`font-bold ${result.is_valid ? "text-green-600" : "text-red-600"}`}>
-                        {result.is_valid ? "Valid ✓" : "Expired ✗"}
+                        {result.is_valid ? "Valid ✓" : "Revoked ✗"}
                       </span>
                     </div>
                   </div>
