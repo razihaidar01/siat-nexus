@@ -21,6 +21,7 @@ export type Database = {
           created_at: string
           expiry_date: string | null
           father_name: string | null
+          grade: string | null
           id: string
           is_valid: boolean | null
           issue_date: string
@@ -36,6 +37,7 @@ export type Database = {
           created_at?: string
           expiry_date?: string | null
           father_name?: string | null
+          grade?: string | null
           id?: string
           is_valid?: boolean | null
           issue_date: string
@@ -51,6 +53,7 @@ export type Database = {
           created_at?: string
           expiry_date?: string | null
           father_name?: string | null
+          grade?: string | null
           id?: string
           is_valid?: boolean | null
           issue_date?: string

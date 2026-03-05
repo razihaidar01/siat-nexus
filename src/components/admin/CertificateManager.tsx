@@ -20,6 +20,7 @@ interface Certificate {
   mother_name: string | null;
   training_from: string | null;
   training_to: string | null;
+  grade: string | null;
 }
 
 const SITE_URL = window.location.origin;
@@ -31,23 +32,33 @@ const generateCertNumber = () => {
 };
 
 const generateSerialNumber = () => {
-  const now = Date.now().toString().slice(-6);
-  return `SN-${now}`;
+  const year = new Date().getFullYear();
+  const rand = String(Math.floor(Math.random() * 9999)).padStart(4, "0");
+  return `SIAT-${year}-${rand}`;
 };
 
 const generateBarcodeDataUrl = (text: string): string => {
   const canvas = document.createElement("canvas");
   JsBarcode(canvas, text, {
     format: "CODE128",
-    width: 1.5,
-    height: 40,
+    width: 2,
+    height: 50,
     displayValue: true,
-    fontSize: 10,
+    fontSize: 12,
     margin: 5,
-    background: "#ffffff",
-    lineColor: "#1a1a2e",
+    background: "transparent",
+    lineColor: "#1a1a1a",
   });
   return canvas.toDataURL("image/png");
+};
+
+const formatDateDDMMYYYY = (dateStr: string | null): string => {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  return `${dd}-${mm}-${yyyy}`;
 };
 
 const CertificateManager = () => {
@@ -64,6 +75,7 @@ const CertificateManager = () => {
   const [expiryDate, setExpiryDate] = useState("");
   const [trainingFrom, setTrainingFrom] = useState("");
   const [trainingTo, setTrainingTo] = useState("");
+  const [grade, setGrade] = useState("A++");
   const [certNumber, setCertNumber] = useState(generateCertNumber());
 
   const fetchCertificates = async () => {
@@ -72,7 +84,7 @@ const CertificateManager = () => {
       .from("certificates")
       .select("*")
       .order("created_at", { ascending: false });
-    setCertificates(data || []);
+    setCertificates((data as any) || []);
     setLoading(false);
   };
 
@@ -125,7 +137,7 @@ const CertificateManager = () => {
           toast.error("Failed: " + error.message);
         }
       } else {
-        toast.success("Certificate created with QR code & barcode!");
+        toast.success("Certificate created!");
         resetForm();
         fetchCertificates();
       }
@@ -144,128 +156,247 @@ const CertificateManager = () => {
     setExpiryDate("");
     setTrainingFrom("");
     setTrainingTo("");
+    setGrade("A++");
     setCertNumber(generateCertNumber());
     setShowForm(false);
   };
 
   const handleDownloadPDF = async (cert: Certificate) => {
-    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    const W = 210;
+    const H = 297;
     const serialNo = generateSerialNumber();
+    const certGrade = cert.grade || "A++";
 
-    // Background
-    doc.setFillColor(26, 26, 46);
-    doc.rect(0, 0, 297, 210, "F");
+    // ─── Background: warm cream ───
+    doc.setFillColor(252, 248, 235);
+    doc.rect(0, 0, W, H, "F");
 
-    // Border
-    doc.setDrawColor(0, 200, 150);
-    doc.setLineWidth(2);
-    doc.rect(10, 10, 277, 190);
-    doc.setLineWidth(0.5);
-    doc.rect(14, 14, 269, 182);
+    // ─── Decorative border (golden) ───
+    // Outer border
+    doc.setDrawColor(184, 148, 72);
+    doc.setLineWidth(3);
+    doc.rect(6, 6, W - 12, H - 12);
+    // Inner border
+    doc.setLineWidth(1.5);
+    doc.rect(10, 10, W - 20, H - 20);
+    // Inner decorative line
+    doc.setLineWidth(0.3);
+    doc.rect(13, 13, W - 26, H - 26);
 
-    // Serial Number - top right
-    doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    doc.text(`Serial No: ${serialNo}`, 275, 22, { align: "right" });
-
-    // Header
-    doc.setTextColor(0, 200, 150);
-    doc.setFontSize(14);
-    doc.text("SIAT — Saharsa Institute of Advance Technology", 148.5, 35, { align: "center" });
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(28);
-    doc.text("CERTIFICATE OF COMPLETION", 148.5, 55, { align: "center" });
-
-    // Divider
-    doc.setDrawColor(0, 200, 150);
-    doc.setLineWidth(0.5);
-    doc.line(80, 62, 217, 62);
-
-    // Body
-    doc.setFontSize(12);
-    doc.setTextColor(200, 200, 200);
-    doc.text("This is to certify that", 148.5, 75, { align: "center" });
-
-    doc.setFontSize(22);
-    doc.setTextColor(255, 255, 255);
-    doc.text(cert.student_name, 148.5, 88, { align: "center" });
-
-    let yPos = 96;
-    doc.setFontSize(10);
-    doc.setTextColor(180, 180, 180);
-    if (cert.father_name) {
-      doc.text(`S/D of: ${cert.father_name}`, 148.5, yPos, { align: "center" });
-      yPos += 7;
-    }
-    if (cert.mother_name) {
-      doc.text(`Mother: ${cert.mother_name}`, 148.5, yPos, { align: "center" });
-      yPos += 7;
-    }
-
-    doc.setFontSize(12);
-    doc.setTextColor(200, 200, 200);
-    doc.text("has successfully completed the course", 148.5, yPos + 4, { align: "center" });
-
-    doc.setFontSize(18);
-    doc.setTextColor(0, 200, 150);
-    doc.text(cert.course_name, 148.5, yPos + 18, { align: "center" });
-
-    // Details - left side
-    doc.setFontSize(10);
-    doc.setTextColor(180, 180, 180);
-    let detailY = 148;
-    doc.text(`Certificate No: ${cert.certificate_number}`, 40, detailY);
-    detailY += 7;
-    doc.text(`Issue Date: ${cert.issue_date}`, 40, detailY);
-    detailY += 7;
-    if (cert.training_from && cert.training_to) {
-      doc.text(`Training Period: ${cert.training_from} to ${cert.training_to}`, 40, detailY);
-      detailY += 7;
-    }
-    if (cert.expiry_date) {
-      doc.text(`Valid Until: ${cert.expiry_date}`, 40, detailY);
-    }
-
-    // Director signature - center
-    doc.setFontSize(11);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Md Parwez Alam", 148.5, 175, { align: "center" });
-    doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    doc.text("Director, SIAT", 148.5, 180, { align: "center" });
-
-    // QR Code - bottom right
-    if (cert.qr_code_url) {
-      try {
-        const qrDataUrl = await QRCode.toDataURL(
-          `${SITE_URL}/verify-certificate?id=${encodeURIComponent(cert.certificate_number)}`,
-          { width: 200, margin: 1, color: { dark: "#1a1a2e", light: "#ffffff" } }
-        );
-        doc.addImage(qrDataUrl, "PNG", 240, 140, 25, 25);
-        doc.setFontSize(7);
-        doc.setTextColor(150, 150, 150);
-        doc.text("Scan to verify", 252.5, 168, { align: "center" });
-      } catch {
-        // QR generation failed
+    // ─── "SIAT SIAT SIAT" watermark pattern ───
+    doc.setFontSize(6);
+    doc.setTextColor(230, 220, 190);
+    for (let y = 20; y < H - 20; y += 8) {
+      for (let x = 18; x < W - 18; x += 22) {
+        doc.text("SIAT", x, y);
       }
     }
 
-    // Barcode - bottom center
-    try {
-      const barcodeDataUrl = generateBarcodeDataUrl(cert.certificate_number);
-      doc.addImage(barcodeDataUrl, "PNG", 110, 182, 77, 14);
-    } catch {
-      // Barcode generation failed
+    // ─── Serial Number Badge (top right) ───
+    doc.setFillColor(184, 148, 72);
+    doc.roundedRect(W - 60, 18, 46, 14, 3, 3, "F");
+    doc.setFontSize(6);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.text("Serial No:", W - 57, 24);
+    doc.setFontSize(7);
+    doc.text(serialNo, W - 57, 29);
+
+    // ─── SIAT Header ───
+    doc.setTextColor(30, 30, 30);
+    doc.setFontSize(36);
+    doc.setFont("helvetica", "bold");
+    doc.text("SIAT", W / 2, 48, { align: "center" });
+
+    // ─── Institute Name ───
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("SAHARSA INSTITUTE OF ADVANCE TECHNOLOGY", W / 2, 58, { align: "center" });
+
+    // ─── Institute Details ───
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
+    const details = [
+      "Baijnathpur, Saharsa",
+      "An ISO 9001:2015 Certified Institute",
+      "Reg. No.: SH-6061 (Saharsa)",
+      "UDYAM Registration No.: UDYAM-BR-29-0035052",
+      "+91 7004216219 | siat.sws@gmail.com | www.siat.in",
+    ];
+    let dy = 64;
+    details.forEach((line, i) => {
+      if (i === 1) {
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(184, 148, 72);
+      } else {
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(80, 80, 80);
+      }
+      doc.text(line, W / 2, dy, { align: "center" });
+      dy += 5;
+    });
+
+    // ─── Divider ───
+    doc.setDrawColor(184, 148, 72);
+    doc.setLineWidth(0.5);
+    doc.line(30, dy + 2, W - 30, dy + 2);
+
+    // ─── "CERTIFICATE OF TRAINING" ───
+    dy += 14;
+    doc.setTextColor(30, 30, 30);
+    doc.setFontSize(24);
+    doc.setFont("helvetica", "bold");
+    doc.text("CERTIFICATE OF TRAINING", W / 2, dy, { align: "center" });
+
+    // ─── "This is to proudly certify that" ───
+    dy += 12;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(80, 80, 80);
+    doc.text("This is to proudly certify that", W / 2, dy, { align: "center" });
+
+    // ─── Student Name ───
+    dy += 14;
+    doc.setFontSize(26);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(20, 20, 20);
+    doc.text(cert.student_name.toUpperCase(), W / 2, dy, { align: "center" });
+
+    // ─── Underline ───
+    const nameWidth = doc.getTextWidth(cert.student_name.toUpperCase());
+    doc.setDrawColor(184, 148, 72);
+    doc.setLineWidth(0.5);
+    doc.line((W - nameWidth) / 2, dy + 2, (W + nameWidth) / 2, dy + 2);
+
+    // ─── Course description ───
+    dy += 14;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(50, 50, 50);
+    const courseText = `has successfully completed the`;
+    doc.text(courseText, W / 2, dy, { align: "center" });
+    dy += 6;
+    doc.setFont("helvetica", "bold");
+    doc.text(`${cert.course_name}`, W / 2, dy, { align: "center" });
+    dy += 6;
+    doc.setFont("helvetica", "normal");
+    doc.text("training program conducted at", W / 2, dy, { align: "center" });
+    dy += 6;
+    doc.text("Saharsa Institute of Advance Technology (SIAT).", W / 2, dy, { align: "center" });
+
+    // ─── Training Duration ───
+    if (cert.training_from && cert.training_to) {
+      dy += 12;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text("Training Duration: From: ", W / 2 - 30, dy);
+      doc.setFont("helvetica", "bold");
+      doc.text(formatDateDDMMYYYY(cert.training_from), W / 2 + 5, dy);
+      doc.setFont("helvetica", "normal");
+      doc.text(" To: ", W / 2 + 28, dy);
+      doc.setFont("helvetica", "bold");
+      doc.text(formatDateDDMMYYYY(cert.training_to), W / 2 + 35, dy);
     }
 
-    // Footer
-    doc.setFontSize(7);
-    doc.setTextColor(120, 120, 120);
-    doc.text("Verify at: " + SITE_URL + "/verify-certificate", 148.5, 200, { align: "center" });
+    // ─── Performance paragraph ───
+    dy += 12;
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(60, 60, 60);
+    doc.text(
+      "Throughout the program, the candidate demonstrated technical",
+      W / 2, dy, { align: "center" }
+    );
+    dy += 5;
+    doc.text(
+      "competence, discipline, and commitment to excellence.",
+      W / 2, dy, { align: "center" }
+    );
+
+    // ─── Grade ───
+    dy += 12;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text("Overall Performance: Grade (", W / 2 - 15, dy);
+    doc.setFont("helvetica", "bold");
+    const gradeX = W / 2 + 22;
+    doc.text(`${certGrade})`, gradeX, dy);
+
+    // ─── Date of Issue ───
+    dy += 12;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text("Date of Issue: ", W / 2 - 12, dy);
+    doc.setFont("helvetica", "bold");
+    doc.text(formatDateDDMMYYYY(cert.issue_date), W / 2 + 8, dy);
+
+    // ─── Bottom section divider ───
+    dy += 8;
+    doc.setDrawColor(184, 148, 72);
+    doc.setLineWidth(0.3);
+    doc.line(30, dy, W - 30, dy);
+
+    // ─── Barcode (center bottom) ───
+    const barcodeY = dy + 6;
+    try {
+      const barcodeDataUrl = generateBarcodeDataUrl(cert.certificate_number);
+      doc.addImage(barcodeDataUrl, "PNG", 65, barcodeY, 80, 20);
+    } catch { /* barcode failed */ }
+
+    // ─── QR Code (bottom left) ───
+    const qrY = barcodeY + 26;
+    try {
+      const qrDataUrl = await QRCode.toDataURL(
+        `${SITE_URL}/verify-certificate?id=${encodeURIComponent(cert.certificate_number)}`,
+        { width: 200, margin: 1, color: { dark: "#1a1a2e", light: "#ffffff" } }
+      );
+      doc.addImage(qrDataUrl, "PNG", 22, qrY, 24, 24);
+      doc.setFontSize(7);
+      doc.setTextColor(100, 100, 100);
+      doc.setFont("helvetica", "normal");
+      doc.text("Scan to Verify", 34, qrY + 27, { align: "center" });
+    } catch { /* qr failed */ }
+
+    // ─── SIAT Seal / Logo (bottom center) ───
+    // Draw a circular seal
+    const sealX = W / 2;
+    const sealY2 = qrY + 12;
+    doc.setDrawColor(184, 148, 72);
+    doc.setLineWidth(1.5);
+    doc.circle(sealX, sealY2, 13);
+    doc.setLineWidth(0.5);
+    doc.circle(sealX, sealY2, 11);
+    doc.setFontSize(6);
+    doc.setTextColor(184, 148, 72);
+    doc.setFont("helvetica", "bold");
+    doc.text("Original Certified", sealX, sealY2 - 4, { align: "center" });
+    doc.setFontSize(14);
+    doc.text("SIAT", sealX, sealY2 + 3, { align: "center" });
+    doc.setFontSize(5);
+    doc.setFont("helvetica", "normal");
+    doc.text("Reg. No: SH 6061", sealX, sealY2 + 7, { align: "center" });
+    doc.text("SAHARSA - BIHAR", sealX, sealY2 + 10, { align: "center" });
+
+    // ─── Director Signature (bottom right) ───
+    const sigX = W - 45;
+    const sigY = qrY + 6;
+    doc.setFontSize(14);
+    doc.setTextColor(30, 30, 80);
+    doc.setFont("helvetica", "italic");
+    doc.text("P. Alam", sigX, sigY);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(30, 30, 30);
+    doc.text("Md Parwez Alam", sigX - 2, sigY + 7);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Director", sigX + 5, sigY + 12);
 
     doc.save(`Certificate-${cert.certificate_number}.pdf`);
-    toast.success("PDF downloaded with QR & barcode!");
+    toast.success("Certificate PDF downloaded!");
   };
 
   const handleToggleValid = async (cert: Certificate) => {
@@ -335,7 +466,19 @@ const CertificateManager = () => {
                 <label className="text-sm font-medium text-foreground block mb-1">Course Name *</label>
                 <input type="text" value={courseName} onChange={(e) => setCourseName(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary outline-none text-foreground"
-                  placeholder="e.g. Mobile Repairing Course" maxLength={150} required />
+                  placeholder="e.g. Python" maxLength={150} required />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground block mb-1">Grade</label>
+                <select value={grade} onChange={(e) => setGrade(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg bg-background border border-border focus:border-primary outline-none text-foreground">
+                  <option value="A++">A++</option>
+                  <option value="A+">A+</option>
+                  <option value="A">A</option>
+                  <option value="B+">B+</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                </select>
               </div>
               <div>
                 <label className="text-sm font-medium text-foreground block mb-1">Training From</label>
@@ -400,7 +543,7 @@ const CertificateManager = () => {
                     </p>
                   )}
                   {cert.training_from && cert.training_to && (
-                    <p className="text-xs text-muted-foreground">Training: {cert.training_from} to {cert.training_to}</p>
+                    <p className="text-xs text-muted-foreground">Training: {formatDateDDMMYYYY(cert.training_from)} to {formatDateDDMMYYYY(cert.training_to)}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
