@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.siat.in/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.siat.in/about-us</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.siat.in/contact-us</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.siat.in/gallery</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.siat.in/verify-certificate</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.siat.in/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  
+  <!-- Training Institute -->
+  <url><loc>https://www.siat.in/training-institute</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/training-institute/mobile-repairing-course-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/training-institute/ac-repairing-course-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/training-institute/laptop-repairing-course-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/training-institute/cctv-installation-training-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/training-institute/course-fees</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.siat.in/training-institute/placement-support</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  
+  <!-- RH Software -->
+  <url><loc>https://www.siat.in/rh-software</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/rh-software/website-development-company-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/rh-software/app-development-company-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/rh-software/software-development-company-bihar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.siat.in/rh-software/ai-development-company-bihar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  
+  <!-- Consultancy -->
+  <url><loc>https://www.siat.in/consultancy-services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/consultancy-services/best-college-in-bihar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.siat.in/consultancy-services/mbbs-admission-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/consultancy-services/btech-admission-bihar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.siat.in/consultancy-services/iso-certification-bihar</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.siat.in/consultancy-services/msme-registration</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  
+  <!-- Government -->
+  <url><loc>https://www.siat.in/government-projects</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.siat.in/government-projects/government-skill-training-bihar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.siat.in/government-projects/pmkvy-training-center-bihar</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>

@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { GraduationCap, Code2, Briefcase, Landmark } from "lucide-react";
+import { GraduationCap, Code2, Briefcase, Landmark, ArrowRight } from "lucide-react";
 
 const divisions = [
   {
@@ -9,7 +9,6 @@ const divisions = [
     title: "Training Institute",
     description: "Industry-ready skill development programs — mobile, laptop & AC repairing, CCTV installation with placement support aur QR-verified certificates.",
     hinglish: "Practical training se career banayein — job-ready skills seekhein!",
-    color: "from-primary to-accent",
     href: "/training-institute",
     features: ["Practical Labs", "Certified Instructors", "Job Placement"],
   },
@@ -18,7 +17,6 @@ const divisions = [
     title: "RH Software",
     description: "Full-stack IT solutions — website, app, software, aur AI development. Bihar ke businesses ko digital banayein.",
     hinglish: "Apna business online le jaayein — website se app tak sab banwayein!",
-    color: "from-accent to-sky",
     href: "/rh-software",
     features: ["Web & Mobile Apps", "AI Solutions", "Enterprise Software"],
   },
@@ -27,7 +25,6 @@ const divisions = [
     title: "Consultancy Services",
     description: "College admissions (MBBS, B.Tech, BCA, Nursing), ISO certification, MSME registration, aur career counseling mein expert guidance.",
     hinglish: "Admission se certification tak — sab kuch ek jagah!",
-    color: "from-gold to-primary",
     href: "/consultancy-services",
     features: ["MBBS Admission", "ISO Certification", "Career Counseling"],
   },
@@ -36,7 +33,6 @@ const divisions = [
     title: "Government Projects",
     description: "PMKVY, Skill India, MSME tenders, aur CSR education projects ke liye trusted partner — proven infrastructure aur compliance.",
     hinglish: "Sarkar ka bharosemand partner — skill training aur project delivery mein!",
-    color: "from-primary to-navy",
     href: "/government-projects",
     features: ["PMKVY Center", "Skill India Partner", "Tender Compliance"],
   },
@@ -45,10 +41,17 @@ const divisions = [
 const DivisionsSection = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   return (
-    <section className="section-padding" style={{ background: "var(--gradient-section)" }}>
-      <div className="max-w-7xl mx-auto">
+    <section className="section-padding relative overflow-hidden" style={{ background: "var(--gradient-section)" }}>
+      {/* Parallax background text */}
+      <motion.div style={{ y: bgY }} className="absolute inset-0 pointer-events-none select-none flex items-center justify-center">
+        <p className="text-[12rem] md:text-[18rem] font-display font-black text-foreground/[0.02] leading-none">SIAT</p>
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
@@ -69,25 +72,32 @@ const DivisionsSection = () => {
           {divisions.map((div, i) => (
             <motion.div
               key={div.title}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: i * 0.15 }}
+              initial={{ opacity: 0, y: 50, rotateX: 5 }}
+              animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
+              transition={{ duration: 0.7, delay: i * 0.15, type: "spring", stiffness: 80 }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              style={{ perspective: "1000px" }}
             >
-              <Link to={div.href} className="block glass-card-hover p-8 md:p-10 group">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${div.color} flex items-center justify-center mb-6`}>
-                  <div.icon className="w-7 h-7 text-primary-foreground" />
-                </div>
-                <h3 className="text-2xl font-display font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                  {div.title}
-                </h3>
-                <p className="text-sm text-primary/80 italic mb-3">{div.hinglish}</p>
-                <p className="text-muted-foreground leading-relaxed mb-6">{div.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {div.features.map((f) => (
-                    <span key={f} className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
-                      {f}
-                    </span>
-                  ))}
+              <Link to={div.href} className="block glass-card-hover p-8 md:p-10 group relative overflow-hidden">
+                {/* Hover gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" style={{ background: "var(--gradient-blue)" }}>
+                    <div.icon className="w-7 h-7 text-primary-foreground" />
+                  </div>
+                  <h3 className="text-2xl font-display font-bold text-foreground mb-2 group-hover:text-primary transition-colors flex items-center gap-2">
+                    {div.title}
+                    <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  </h3>
+                  <p className="text-sm text-primary/80 italic mb-3">{div.hinglish}</p>
+                  <p className="text-muted-foreground leading-relaxed mb-6">{div.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {div.features.map((f) => (
+                      <span key={f} className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
+                        {f}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </Link>
             </motion.div>
